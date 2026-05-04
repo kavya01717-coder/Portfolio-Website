@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Kavya Patel — Creative Designer & Developer</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  /* ===== THEME VARIABLES ===== */
+  :root {
+    --font-display: 'DM Serif Display', serif;
+    --font-body: 'DM Sans', sans-serif;
+    --accent: #c9a96e;
+    --accent2: #a07840;
+    --green: #4caf50;
+  }
+  [data-theme="dark"] {
+    --bg: #0a0a0a;
+    --surface: #111111;
+    --surface2: #1a1a1a;
+    --surface3: #202020;
+    --border: #1e1e1e;
+    --border2: #2a2a2a;
+    --text: #f0ede8;
+    --text2: #b0ada8;
+    --muted: #787878;
+    --muted2: #383838;
+    --nav-bg: rgba(10,10,10,0.9);
+  }
+  [data-theme="light"] {
+    --bg: #f5f2ee;
+    --surface: #ffffff;
+    --surface2: #f0ede8;
+    --surface3: #e8e4de;
+    --border: #e0dbd4;
+    --border2: #d0cbc4;
+    --text: #1a1814;
+    --text2: #4a4640;
+    --muted: #888078;
+    --muted2: #c0bbb4;
+    --nav-bg: rgba(245,242,238,0.92);
+  }
+
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.6;
+    overflow-x: hidden;
+    cursor: none;
+    transition: background 0.35s ease, color 0.35s ease;
+  }
+
+  /* ===== CUSTOM CURSOR ===== */
+  .cursor-dot {
+    width: 8px; height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%,-50%);
+    transition: transform 0.1s;
+  }
+  .cursor-dot.clicking { transform: translate(-50%,-50%) scale(0.6); }
+  .cursor-label {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9998;
+    font-family: var(--font-body);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: var(--bg);
+    border: 1px solid var(--border2);
+    padding: 4px 12px;
+    border-radius: 20px;
+    white-space: nowrap;
+    transform: translate(16px,-50%);
+    transition: background 0.35s, border-color 0.35s;
+  }
+
+  /* ===== NAVBAR ===== */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 22px 52px;
+    border-bottom: 1px solid var(--border);
+    transform: translateY(0);
+    transition: transform 0.4s ease, border-color 0.35s;
+  }
+  nav.hidden { transform: translateY(-100%); }
+  nav::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: var(--nav-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    z-index: -1;
+    transition: background 0.35s;
+  }
+  .nav-logo {
+    font-family: var(--font-display);
+    font-size: 22px;
+    color: var(--text);
+    text-decoration: none;
+    letter-spacing: -0.02em;
+    transition: color 0.2s;
+    cursor: none;
+  }
+  .nav-logo:hover { color: var(--accent); }
+  .nav-right { display: flex; align-items: center; gap: 36px; }
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+    cursor: none;
+  }
+  .nav-links a:hover { color: var(--accent); }
+  .theme-toggle {
+    background: transparent;
+    border: 1px solid var(--border2);
+    color: var(--muted);
+    font-family: var(--font-body);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    padding: 6px 14px;
+    border-radius: 20px;
+    cursor: none;
+    display: flex; align-items: center; gap: 7px;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ===== HERO ===== */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0 52px 90px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-bg-text {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    font-family: var(--font-display);
+    font-size: 28vw;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--border2);
+    white-space: nowrap;
+    pointer-events: none;
+    user-select: none;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    transition: -webkit-text-stroke-color 0.35s;
+  }
+  .open-to-work {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--text2);
+    border: 1px solid var(--border2);
+    padding: 7px 16px;
+    border-radius: 20px;
+    letter-spacing: 0.05em;
+    margin-bottom: 28px;
+    width: fit-content;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.1s ease forwards;
+    transition: border-color 0.35s, color 0.35s;
+  }
+  .otw-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--green);
+    animation: pulse 2s ease infinite;
+    flex-shrink: 0;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.35} }
+
+  .hero-tag {
+    font-size: 12px;
+    color: var(--accent);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    display: flex; align-items: center; gap: 12px;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.2s ease forwards;
+  }
+  .hero-tag::before { content:''; display:block; width:28px; height:1px; background:var(--accent); }
+
+  .hero-name {
+    font-family: var(--font-display);
+    font-size: clamp(56px, 9vw, 120px);
+    line-height: 0.9;
+    letter-spacing: -0.03em;
+    margin-bottom: 36px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.35s ease forwards;
+  }
+  .hero-name span { font-style: italic; color: var(--accent); }
+
+  .hero-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.55s ease forwards;
+  }
+  .hero-desc { max-width: 420px; color: var(--muted); font-size: 15px; line-height: 1.8; transition: color 0.35s; }
+  .hero-desc strong { color: var(--text); font-weight: 500; }
+  .hero-cta { display: flex; flex-direction: column; align-items: flex-end; gap: 16px; }
+  .btn-row { display: flex; gap: 12px; }
+
+  .btn-primary {
+    background: var(--accent); color: #0a0a0a;
+    padding: 13px 30px; border-radius: 30px;
+    font-size: 13px; font-weight: 600;
+    font-family: var(--font-body);
+    text-decoration: none; letter-spacing: 0.04em;
+    border: none; cursor: none; display: inline-block;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .btn-primary:hover { background: var(--accent2); transform: translateY(-2px); }
+  .btn-outline {
+    background: transparent; color: var(--text);
+    padding: 13px 30px; border-radius: 30px;
+    font-size: 13px; font-family: var(--font-body);
+    text-decoration: none; letter-spacing: 0.04em;
+    border: 1px solid var(--border2);
+    cursor: none; display: inline-block;
+    transition: border-color 0.2s, transform 0.2s, color 0.2s, background 0.35s;
+  }
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+
+  /* ===== TICKER ===== */
+  .ticker-wrap {
+    overflow: hidden;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 0;
+    background: var(--surface);
+    transition: background 0.35s, border-color 0.35s;
+  }
+  .ticker { display: flex; animation: ticker 32s linear infinite; }
+  .ticker:hover { animation-play-state: paused; }
+  .ticker-item {
+    white-space: nowrap; padding: 0 32px;
+    font-size: 12px; color: var(--muted);
+    letter-spacing: 0.12em; text-transform: uppercase;
+    display: flex; align-items: center; gap: 32px;
+    transition: color 0.35s;
+  }
+  .ticker-sep { color: var(--accent); font-size: 10px; }
+  @keyframes ticker { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+  /* ===== SECTIONS ===== */
+  section { padding: 110px 52px; transition: background 0.35s; }
+  .section-label {
+    font-size: 11px; color: var(--accent);
+    letter-spacing: 0.16em; text-transform: uppercase;
+    margin-bottom: 18px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-label::before { content:''; display:block; width:22px; height:1px; background:var(--accent); }
+  .section-title {
+    font-family: var(--font-display);
+    font-size: clamp(38px,5.5vw,72px);
+    letter-spacing: -0.025em; line-height: 1.05;
+    margin-bottom: 72px;
+    transition: color 0.35s;
+  }
+  .section-title em { font-style: italic; color: var(--accent); }
+
+  /* ===== PROJECTS ===== */
+  #projects { background: var(--bg); }
+  .projects-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    border: 1px solid var(--border);
+    transition: border-color 0.35s;
+  }
+  .project-card {
+    background: var(--surface);
+    padding: 44px;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    position: relative; overflow: hidden;
+    transition: background 0.35s, border-color 0.35s;
+  }
+  .project-card:nth-child(2) { border-right: none; }
+  .project-card.wide {
+    grid-column: 1 / -1; border-right: none; border-bottom: none;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center;
+  }
+  .project-card::after {
+    content:''; position:absolute; bottom:0; left:0;
+    width:0; height:2px; background:var(--accent);
+    transition: width 0.45s ease;
+  }
+  .project-card:hover { background: var(--surface2); }
+  .project-card:hover::after { width: 100%; }
+  .project-num { font-size:11px; color:var(--muted2); letter-spacing:0.12em; margin-bottom:22px; transition: color 0.35s; }
+  .project-tags { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:18px; }
+  .tag {
+    font-size:10px; padding:4px 11px; border-radius:20px;
+    border:1px solid var(--border2); color:var(--muted);
+    letter-spacing:0.07em; text-transform:uppercase;
+    transition: border-color 0.35s, color 0.35s;
+  }
+  .tag.accent { border-color:var(--accent2); color:var(--accent); }
+  .project-title { font-family:var(--font-display); font-size:24px; margin-bottom:14px; line-height:1.2; color:var(--text); transition: color 0.35s; }
+  .project-desc { font-size:13px; color:var(--muted); line-height:1.75; margin-bottom:28px; transition: color 0.35s; }
+  .project-links { display:flex; gap:16px; }
+  .project-link {
+    font-size:12px; color:var(--accent);
+    letter-spacing:0.07em; text-decoration:none;
+    text-transform:uppercase; border-bottom:1px solid transparent;
+    transition: border-color 0.2s; padding-bottom:1px; cursor:none;
+  }
+  .project-link:hover { border-color:var(--accent); }
+  .project-link.muted { color:var(--muted); }
+  .project-link.muted:hover { color:var(--text); border-color:var(--muted); }
+  .project-img-placeholder {
+    background: var(--surface2); border-radius:12px; min-height:220px;
+    display:flex; align-items:center; justify-content:center;
+    color:var(--muted2); font-size:12px; letter-spacing:0.08em;
+    text-transform:uppercase; transition: background 0.35s, color 0.35s;
+  }
+
+  /* ===== ABOUT ===== */
+  #about { background: var(--surface); border-top: 1px solid var(--border); }
+  .about-grid { display:grid; grid-template-columns:1fr 1fr; gap:90px; align-items:start; }
+  .about-text p { color:var(--muted); line-height:1.85; margin-bottom:18px; font-size:15px; transition: color 0.35s; }
+  .about-text p strong { color:var(--text); font-weight:500; }
+  .about-block { margin-bottom:44px; }
+  .about-block h3 {
+    font-size:11px; color:var(--accent); letter-spacing:0.16em;
+    text-transform:uppercase; margin-bottom:18px; padding-bottom:10px;
+    border-bottom:1px solid var(--border); transition: border-color 0.35s;
+  }
+  .skills-cloud { display:flex; flex-wrap:wrap; gap:8px; }
+  .skill-pill {
+    font-size:12px; padding:7px 15px;
+    border:1px solid var(--border2); border-radius:20px;
+    color:var(--muted); cursor:none;
+    transition: all 0.25s, border-color 0.35s;
+  }
+  .skill-pill:hover { border-color:var(--accent); color:var(--accent); transform:translateY(-2px); }
+
+  /* ===== EDUCATION ===== */
+  #education { background: var(--bg); border-top: 1px solid var(--border); }
+  .edu-grid {
+    display:grid; grid-template-columns:1fr 1fr;
+    border:1px solid var(--border); transition: border-color 0.35s;
+  }
+  .edu-card {
+    background:var(--surface); padding:40px;
+    border-right:1px solid var(--border); border-bottom:1px solid var(--border);
+    position:relative; overflow:hidden;
+    transition: background 0.35s, border-color 0.35s;
+  }
+  .edu-card:nth-child(2) { border-right:none; }
+  .edu-card.cert-card { grid-column:1/-1; border-right:none; border-bottom:none; }
+  .edu-card::after {
+    content:''; position:absolute; bottom:0; left:0;
+    width:0; height:2px; background:var(--accent);
+    transition: width 0.45s ease;
+  }
+  .edu-card:hover::after { width:100%; }
+  .edu-year-label { font-size:11px; color:var(--muted2); letter-spacing:0.12em; text-transform:uppercase; margin-bottom:20px; transition: color 0.35s; }
+  .edu-degree { font-family:var(--font-display); font-size:22px; margin-bottom:10px; color:var(--text); transition: color 0.35s; }
+  .edu-school { font-size:14px; color:var(--muted); margin-bottom:12px; transition: color 0.35s; }
+  .edu-badge {
+    font-size:12px; color:var(--accent);
+    border:1px solid var(--border2); padding:4px 14px;
+    border-radius:20px; display:inline-block;
+    transition: border-color 0.35s;
+  }
+  .cert-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px; margin-top:24px; }
+  .cert-card-item {
+    padding:20px; border:1px solid var(--border2); border-radius:12px;
+    transition: border-color 0.2s, background 0.35s;
+    cursor: none;
+  }
+  .cert-card-item:hover { border-color:var(--accent); }
+  .cert-name { font-size:13px; font-weight:500; color:var(--text); margin-bottom:6px; transition: color 0.35s; }
+  .cert-org { font-size:12px; color:var(--muted); margin-bottom:8px; transition: color 0.35s; }
+  .cert-date { font-size:11px; color:var(--accent); }
+
+  /* ===== CONTACT ===== */
+  #contact { background: var(--bg); border-top: 1px solid var(--border); }
+  .contact-grid { display:grid; grid-template-columns:1fr 1fr; gap:90px; align-items:start; }
+  .contact-big { font-family:var(--font-display); font-size:clamp(30px,4.5vw,58px); letter-spacing:-0.025em; line-height:1.15; margin-bottom:28px; transition: color 0.35s; }
+  .contact-big em { font-style:italic; color:var(--accent); }
+  .contact-sub { color:var(--muted); font-size:14px; line-height:1.85; margin-bottom:36px; transition: color 0.35s; }
+  .contact-links { display:flex; flex-direction:column; }
+  .contact-link {
+    display:flex; justify-content:space-between; align-items:center;
+    padding:20px 0; border-bottom:1px solid var(--border);
+    text-decoration:none; cursor:none;
+    transition: padding-left 0.25s, border-color 0.35s;
+  }
+  .contact-link:hover { padding-left:10px; }
+  .cl-left { display:flex; flex-direction:column; gap:3px; }
+  .cl-name { font-size:14px; color:var(--text); font-weight:500; transition: color 0.2s; }
+  .contact-link:hover .cl-name { color:var(--accent); }
+  .cl-handle { font-size:12px; color:var(--muted); transition: color 0.35s; }
+  .cl-arrow { color:var(--muted); font-size:16px; transition: transform 0.2s, color 0.2s; }
+  .contact-link:hover .cl-arrow { transform:translate(4px,-4px); color:var(--accent); }
+
+  /* ===== FOOTER ===== */
+  footer {
+    padding:28px 52px; border-top:1px solid var(--border);
+    display:flex; justify-content:space-between; align-items:center;
+    background:var(--bg); transition: background 0.35s, border-color 0.35s;
+  }
+  footer p { font-size:12px; color:var(--muted); transition: color 0.35s; }
+
+  /* ===== ANIMATIONS ===== */
+  @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+  .reveal { opacity:0; transform:translateY(28px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity:1; transform:none; }
+  .reveal-delay { transition-delay:0.15s; }
+  .reveal-delay2 { transition-delay:0.3s; }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width:900px){
+    nav { padding:18px 24px; }
+    .nav-links { display:none; }
+    section { padding:80px 24px; }
+    #hero { padding:0 24px 70px; }
+    .hero-bottom { flex-direction:column; align-items:flex-start; gap:28px; }
+    .hero-cta { align-items:flex-start; }
+    .projects-grid,.edu-grid,.contact-grid,.about-grid { grid-template-columns:1fr; }
+    .project-card.wide { grid-template-columns:1fr; }
+    .edu-card.cert-card { grid-column:auto; }
+    footer { flex-direction:column; gap:8px; text-align:center; padding:24px; }
+    .hero-bg-text { font-size:40vw; }
+  }
+  .contact-link-row { display:flex; align-items:center; border-bottom:1px solid var(--border); transition: border-color 0.35s; }
+  .contact-link-row .contact-link { border-bottom:none; flex:1; }
+  .copy-btn {
+    background: transparent; border:1px solid var(--border2);
+    color: var(--muted); border-radius:8px;
+    width:32px; height:32px; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+    cursor:none; margin-left:10px;
+    transition: border-color 0.2s, color 0.2s, background 0.2s;
+  }
+  .copy-btn:hover { border-color:var(--accent); color:var(--accent); }
+  .copy-btn.copied { border-color:var(--green); color:var(--green); background:rgba(76,175,80,0.1); }
+
+  /* ===== RESUME MODAL ===== */
+  .resume-modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.75);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 1000;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.3s ease;
+    padding: 24px;
+  }
+  .resume-modal-overlay.active {
+    opacity: 1; pointer-events: all;
+  }
+  .resume-modal {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    width: 100%; max-width: 420px;
+    position: relative;
+    transform: translateY(32px);
+    transition: transform 0.4s cubic-bezier(0.22,1,0.36,1), background 0.35s, border-color 0.35s;
+    overflow: hidden;
+  }
+  .resume-modal-overlay.active .resume-modal {
+    transform: translateY(0);
+  }
+
+  /* top accent bar like project cards */
+  .resume-modal::before {
+    content: '';
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 2px;
+    background: var(--accent);
+  }
+
+  .resume-modal-header {
+    padding: 36px 40px 28px;
+    border-bottom: 1px solid var(--border);
+    transition: border-color 0.35s;
+  }
+  .resume-modal-label {
+    font-size: 11px; color: var(--accent);
+    letter-spacing: 0.16em; text-transform: uppercase;
+    margin-bottom: 14px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .resume-modal-label::before {
+    content: ''; display: block;
+    width: 22px; height: 1px; background: var(--accent);
+  }
+  .resume-modal-title {
+    font-family: var(--font-display);
+    font-size: 32px;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    color: var(--text);
+    transition: color 0.35s;
+  }
+  .resume-modal-title em {
+    font-style: italic;
+    color: var(--accent);
+  }
+  .resume-modal-sub {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 10px;
+    line-height: 1.7;
+    transition: color 0.35s;
+  }
+
+  .resume-modal-body {
+    padding: 0;
+  }
+
+  /* each option row — styled like contact links */
+  .resume-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 22px 40px;
+    border-bottom: 1px solid var(--border);
+    text-decoration: none;
+    cursor: none;
+    transition: padding-left 0.25s ease, background 0.2s, border-color 0.35s;
+    position: relative;
+    overflow: hidden;
+  }
+  .resume-option:last-child { border-bottom: none; }
+  .resume-option::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0;
+    width: 0; height: 2px;
+    background: var(--accent);
+    transition: width 0.4s ease;
+  }
+  .resume-option:hover { padding-left: 50px; background: var(--surface2); }
+  .resume-option:hover::after { width: 100%; }
+
+  .resume-option-left {
+    display: flex; align-items: center; gap: 16px;
+  }
+  .resume-option-icon {
+    width: 38px; height: 38px;
+    border: 1px solid var(--border2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px;
+    color: var(--accent);
+    flex-shrink: 0;
+    transition: border-color 0.2s, background 0.35s;
+  }
+  .resume-option:hover .resume-option-icon {
+    border-color: var(--accent);
+    background: var(--surface3);
+  }
+  .resume-option-text {}
+  .resume-option-name {
+    font-size: 14px; font-weight: 500;
+    color: var(--text); display: block;
+    letter-spacing: 0.01em;
+    transition: color 0.2s;
+  }
+  .resume-option:hover .resume-option-name { color: var(--accent); }
+  .resume-option-hint {
+    font-size: 11px; color: var(--muted);
+    letter-spacing: 0.06em; text-transform: uppercase;
+    margin-top: 2px; display: block;
+    transition: color 0.35s;
+  }
+  .resume-option-arrow {
+    font-size: 18px; color: var(--muted);
+    transition: transform 0.2s, color 0.2s;
+  }
+  .resume-option:hover .resume-option-arrow {
+    transform: translate(4px, -4px);
+    color: var(--accent);
+  }
+
+  /* close button — top right */
+  .resume-modal-close {
+    position: absolute; top: 18px; right: 20px;
+    background: transparent;
+    border: 1px solid var(--border2);
+    color: var(--muted);
+    font-size: 13px;
+    cursor: none;
+    width: 30px; height: 30px;
+    display: flex; align-items: center; justify-content: center;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .resume-modal-close:hover { border-color: var(--accent); color: var(--accent); }
+</style>
+</head>
+<body>
+
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-label" id="cursorLabel">Guest</div>
+
+<!-- ===== RESUME MODAL ===== -->
+<div class="resume-modal-overlay" id="resumeModalOverlay" onclick="closeResumeModalOutside(event)">
+  <div class="resume-modal" id="resumeModal">
+    <button class="resume-modal-close" onclick="closeResumeModal()" title="Close">✕</button>
+
+    <div class="resume-modal-header">
+      <div class="resume-modal-label">Resume</div>
+      <div class="resume-modal-title">Open or<br><em>Save.</em></div>
+      <p class="resume-modal-sub">Choose how you'd like to access the resume.</p>
+    </div>
+
+    <div class="resume-modal-body">
+      <a href="https://drive.google.com/file/d/1r8iNHhrJgL9iG2qDa7mz0SFbe565LaA8/view" target="_blank" class="resume-option" onclick="closeResumeModal()">
+        <div class="resume-option-left">
+          <div class="resume-option-icon">◉</div>
+          <div class="resume-option-text">
+            <span class="resume-option-name">View Resume</span>
+            <span class="resume-option-hint">Opens in browser · Google Drive</span>
+          </div>
+        </div>
+        <span class="resume-option-arrow">↗</span>
+      </a>
+
+      <a href="https://drive.google.com/uc?export=download&id=1r8iNHhrJgL9iG2qDa7mz0SFbe565LaA8" target="_blank" class="resume-option" onclick="closeResumeModal()">
+        <div class="resume-option-left">
+          <div class="resume-option-icon">↓</div>
+          <div class="resume-option-text">
+            <span class="resume-option-name">Download PDF</span>
+            <span class="resume-option-hint">Saves to your device</span>
+          </div>
+        </div>
+        <span class="resume-option-arrow">↗</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ===== NAVBAR ===== -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">Kavya</a>
+  <div class="nav-right">
+    <ul class="nav-links">
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#about">About Me</a></li>
+      <li><a href="#education">Education</a></li>
+      <li><a href="#contact">Get In Touch</a></li>
+    </ul>
+    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">
+      <span id="toggleIcon">◐</span>
+      <span id="toggleLabel">Light</span>
+    </button>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section id="hero">
+  <div class="hero-bg-text">KP</div>
+
+  <div class="open-to-work">
+    <span class="otw-dot"></span>
+    Open to Work
+  </div>
+
+  <div class="hero-tag">Surat, Gujarat · India</div>
+
+  <h1 class="hero-name">
+    Kavya<br><span>Patel</span>
+  </h1>
+
+  <div class="hero-bottom">
+    <p class="hero-desc">
+      3rd year Computer Engineering student from Surat, building clean, responsive websites with HTML, CSS and JavaScript — and bringing them to life through graphic design.
+    </p>
+    <div class="hero-cta">
+      <div class="btn-row">
+        <a href="#projects" class="btn-primary">View Work</a>
+        <!-- UPDATE: Add your resume PDF file next to index.html -->
+        <button onclick="openResumeModal()" class="btn-outline">Resume ↓</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TICKER ===== -->
+<div class="ticker-wrap">
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-item">Graphic Design <span class="ticker-sep">✦</span></div>
+    <div class="ticker-item">HTML5 <span class="ticker-sep">✦</span></div>
+    <div class="ticker-item">CSS3 <span class="ticker-sep">✦</span></div>
+    <div class="ticker-item">JavaScript <span class="ticker-sep">✦</span></div>
+    <div class="ticker-item">Graphic Design <span class="ticker-sep">✦</span></div>
+    <div class="ticker-item">HTML5 <span class="ticker-sep">✦</span></div>
+    <div class="ticker-item">CSS3 <span class="ticker-sep">✦</span></div>
+    <div class="ticker-item">JavaScript <span class="ticker-sep">✦</span></div>
+    <div class="ticker-item">Graphic Design <span class="ticker-sep">✦</span></div>
+    <div class="ticker-item">HTML5 <span class="ticker-sep">✦</span></div>
+    <div class="ticker-item">CSS3 <span class="ticker-sep">✦</span></div>
+    <div class="ticker-item">JavaScript <span class="ticker-sep">✦</span></div>
+    <div class="ticker-item">Graphic Design <span class="ticker-sep">✦</span></div>
+    <div class="ticker-item">HTML5 <span class="ticker-sep">✦</span></div>
+    <div class="ticker-item">CSS3 <span class="ticker-sep">✦</span></div>
+    <div class="ticker-item">JavaScript <span class="ticker-sep">✦</span></div>
+  </div>
+</div>
+
+<!-- ===== PROJECTS ===== -->
+<section id="projects">
+  <div class="section-label">Selected Work</div>
+  <h2 class="section-title">Projects &<br><em>Case Studies</em></h2>
+
+  <div class="projects-grid">
+    <!-- PROJECT 1 — Portfolio Website -->
+    <div class="project-card reveal">
+      <div class="project-num">01</div>
+      <div class="project-tags">
+        <span class="tag accent">UI/UX Design</span>
+        <span class="tag">HTML/CSS/JS</span>
+        <span class="tag">Frontend Dev</span>
+      </div>
+      <h3 class="project-title">Personal Portfolio Website</h3>
+      <p class="project-desc">Designed and developed this personal portfolio website from scratch. Features a dark/light mode, custom cursor, smooth scroll animations, and a fully responsive layout.</p>
+      <div class="project-links">
+        <!-- GitHub repo link for portfolio -->
+        <a href="https://github.com/kavya01717-coder/Portfolio-Website" class="project-link muted" target="_blank">GitHub →</a>
+      </div>
+    </div>
+
+    <!-- PROJECT 2 — AI Resume Screening System -->
+    <div class="project-card reveal reveal-delay">
+      <div class="project-num">02</div>
+      <div class="project-tags">
+        <span class="tag accent">Web Design</span>
+        <span class="tag">HTML/CSS/JS</span>
+        <span class="tag">Frontend Dev</span>
+      </div>
+      <h3 class="project-title">AI Resume Screening System</h3>
+      <p class="project-desc">Designed and built the frontend website for an AI-powered resume screening system. Created an intuitive interface that allows recruiters to easily manage and view screened resume results.</p>
+      <div class="project-links">
+        <a href="https://github.com/kavya01717-coder/AI-Resume-Screening-System" class="project-link muted" target="_blank">GitHub →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ABOUT ===== -->
+<section id="about">
+  <div class="section-label">About Me</div>
+  <h2 class="section-title">Frontend Dev who<br><em>designs.</em></h2>
+
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <p>Hi, I'm <strong>Kavya Patel</strong> — a 3rd year Computer Engineering student from Surat, Gujarat. I love building clean, responsive websites that feel as good as they look.</p>
+      <p>My primary focus is <strong>frontend development</strong> — writing structured HTML, crafting pixel-perfect CSS, and bringing interactivity to life with JavaScript. I also bring a strong sense of visual aesthetics through <strong>graphic design</strong> using Photoshop and Canva.</p>
+      <p>I care deeply about writing <strong>clean code and creating experiences that work seamlessly across every device</strong>.</p>
+      <br/>
+      <button onclick="openResumeModal()" class="btn-primary">Download Resume ↓</button>
+    </div>
+
+    <div class="reveal reveal-delay">
+      <div class="about-block">
+        <h3>Skills & Tools</h3>
+        <div class="skills-cloud">
+          <span class="skill-pill">HTML5</span>
+          <span class="skill-pill">CSS3</span>
+          <span class="skill-pill">JavaScript</span>
+          <span class="skill-pill">Responsive Design</span>
+          <span class="skill-pill">Git & GitHub</span>
+          <span class="skill-pill">Photoshop</span>
+          <span class="skill-pill">Canva</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== EDUCATION ===== -->
+<section id="education">
+  <div class="section-label">Education</div>
+  <h2 class="section-title">My Academic<br><em>Journey</em></h2>
+
+  <div class="edu-grid">
+    <!-- HSC FIRST -->
+    <div class="edu-card reveal">
+      <div class="edu-year-label">2022 – 2023</div>
+      <div class="edu-degree">HSC · Science</div>
+      <div class="edu-school">Reliance Foundation School, Surat</div>
+      <span class="edu-badge">67.25%</span>
+    </div>
+
+    <!-- THEN B.E. -->
+    <div class="edu-card reveal reveal-delay">
+      <div class="edu-year-label">2023 – 2027</div>
+      <div class="edu-degree">B.Tech Computer Engineering</div>
+      <div class="edu-school">Madhuben & Bhanubhai Patel Institute of Technology, Anand, Gujarat</div>
+      <span class="edu-badge">CGPA: 7.20 / 10</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== CONTACT ===== -->
+<section id="contact">
+  <div class="contact-grid">
+    <div class="reveal">
+      <div class="section-label">Get In Touch</div>
+      <p class="contact-big">Let's create something<br><em>great together.</em></p>
+      <a href="https://mail.google.com/mail/?view=cm&to=kavya01717@gmail.com" target="_blank" class="btn-primary">Say Hello ✉</a>
+    </div>
+
+    <div class="reveal reveal-delay">
+      <div class="contact-links">
+
+        <!-- GitHub -->
+        <a href="https://github.com/kavya01717-coder" class="contact-link" target="_blank">
+          <div class="cl-left"><span class="cl-name">GitHub</span><span class="cl-handle">github.com/kavya01717-coder</span></div>
+          <span class="cl-arrow">↗</span>
+        </a>
+
+        <!-- Email -->
+        <div class="contact-link-row">
+          <a href="https://mail.google.com/mail/?view=cm&to=kavya01717@gmail.com" target="_blank" class="contact-link">
+            <div class="cl-left"><span class="cl-name">Email</span><span class="cl-handle">kavya01717@gmail.com</span></div>
+            <span class="cl-arrow">↗</span>
+          </a>
+          <button class="copy-btn" onclick="copyText('kavya01717@gmail.com', this)" title="Copy email">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          </button>
+        </div>
+
+        <!-- WhatsApp -->
+        <div class="contact-link-row">
+          <a href="https://wa.me/918849306677" class="contact-link" target="_blank">
+            <div class="cl-left"><span class="cl-name">WhatsApp</span><span class="cl-handle">+91 88493 06677</span></div>
+            <span class="cl-arrow">↗</span>
+          </a>
+          <button class="copy-btn" onclick="copyText('+918849306677', this)" title="Copy number">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <p>© 2026 Kavya Patel · Frontend Developer & Graphic Designer</p>
+</footer>
+
+<script>
+
+/* ===== RESUME MODAL ===== */
+function openResumeModal() {
+  document.getElementById('resumeModalOverlay').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+function closeResumeModal() {
+  document.getElementById('resumeModalOverlay').classList.remove('active');
+  document.body.style.overflow = '';
+}
+function closeResumeModalOutside(e) {
+  if (e.target === document.getElementById('resumeModalOverlay')) closeResumeModal();
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeResumeModal(); });
+
+function copyText(text, btn) {
+  navigator.clipboard.writeText(text).then(() => {
+    btn.classList.add('copied');
+    btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>`;
+    }, 2000);
+  });
+}
+
+/* ===== CURSOR ===== */
+const dot = document.getElementById('cursorDot');
+const label = document.getElementById('cursorLabel');
+document.addEventListener('mousemove', e => {
+  dot.style.left = e.clientX + 'px';
+  dot.style.top = e.clientY + 'px';
+  label.style.left = e.clientX + 'px';
+  label.style.top = e.clientY + 'px';
+});
+document.addEventListener('mousedown', () => dot.classList.add('clicking'));
+document.addEventListener('mouseup', () => dot.classList.remove('clicking'));
+
+/* ===== NAVBAR HIDE/SHOW ON SCROLL (like dvdrod) ===== */
+const navbar = document.getElementById('navbar');
+let lastY = 0, ticking = false;
+window.addEventListener('scroll', () => {
+  if (!ticking) {
+    requestAnimationFrame(() => {
+      const y = window.scrollY;
+      if (y > lastY && y > 80) {
+        navbar.classList.add('hidden');
+      } else {
+        navbar.classList.remove('hidden');
+      }
+      lastY = y;
+      ticking = false;
+    });
+    ticking = true;
+  }
+});
+
+/* ===== DARK / LIGHT MODE ===== */
+const html = document.documentElement;
+const toggleIcon = document.getElementById('toggleIcon');
+const toggleLabel = document.getElementById('toggleLabel');
+
+const saved = localStorage.getItem('kp-theme') || 'dark';
+html.setAttribute('data-theme', saved);
+updateUI(saved);
+
+function toggleTheme() {
+  const current = html.getAttribute('data-theme');
+  const next = current === 'dark' ? 'light' : 'dark';
+  html.setAttribute('data-theme', next);
+  localStorage.setItem('kp-theme', next);
+  updateUI(next);
+}
+
+function updateUI(theme) {
+  if (theme === 'dark') {
+    toggleIcon.textContent = '◐';
+    toggleLabel.textContent = 'Light';
+  } else {
+    toggleIcon.textContent = '◑';
+    toggleLabel.textContent = 'Dark';
+  }
+}
+
+/* ===== SCROLL REVEAL ===== */
+const revealEls = document.querySelectorAll('.reveal');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+revealEls.forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
